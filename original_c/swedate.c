@@ -586,3 +586,94 @@ void CALL_CONV swe_jdut1_to_utc(double tjd_ut, int32 gregflag, int32 *iyear, int
   swe_jdet_to_utc(tjd_et, gregflag, iyear, imonth, iday, ihour, imin, dsec);
 }
 
+func sweJdetToUtc(tjdEt float64, gregflag int) (int, int, int, int, int, float64) {
+  var iyear, imonth, iday, ihour, imin int
+  var dsec float64
+  var second60 bool
+  var iyear2, imonth2, iday2, nleap, ndat, tabsizNleap int
+  var d, tjd, tjdEt1972, tjdUt float64
+
+  // If tjdEt is before 1 Jan 1972 UTC, return UT1
+  tjdEt1972 = J1972 + (32.184+NLEAP_INIT)/86400.0
+  d = sweDeltatEx(tjdEt, -1, nil)
+  tjdUt = tjdEt - sweDeltatEx(tjdEt-d, -1, nil)
+  tjdUt = tjdEt - sweDeltatEx(tjdUt, -1, nil)
+  if tjdEt < tjdEt1972 {
+  	iyear, imonth, iday, d = sweRevjul(tjdUt, gregflag)
+  	ihour = int(d)
+  	d -= float64(ihour)
+  	d *= 60
+  	imin = int(d)
+  	dsec = (d - float64(imin)) * 60.0
+  	return iyear, imonth, iday, ihour, imin, dsec
+  }
+
+  // Minimum number of leap seconds since 1972
+  tabsizNleap = initLeapSec()
+  sweRevjul(tjdUt-1, SE_GREG_CAL, &iyear2, &imonth2, &iday2, &d)
+  ndat = iyear2*10000 + imonth2*100 + iday2
+  nleap = 0
+  for i := 0; i < tabsizNleap; i++ {
+  	if ndat <= leapSeconds[i] {
+  		break
+  	}
+  	nleap++
+  }
+
+  // Date of potentially missing leap second
+  if nleap < tabsizNleap {
+  	i := leapSeconds[nleap]
+  	iyear2 = i / 10000
+  	imonth2 = (i % 10000) / 100
+  	iday2 = i % 100
+  	tjd = sweJulday(iyear2, imonth2, iday2, 0, SE_GREG_CAL)
+  	sweRevjul(tjd+1, SE_GREG_CAL, &iyear2, &imonth2, &iday2, &d)
+  	dret := make([]float64, 2)
+  	sweUtcToJd(iyear2, imonth2, iday2, 0, 0, 0, SE_GREG_CAL, dret, nil)
+  	d = tjdEt - dret[0]
+  	if d >= 0 {
+  		nleap++
+  	} else if d < 0 && d > -1.0/86400.0 {
+  		second60 = true
+  	}
+  }
+
+  // UTC, still unsure about one leap second
+  tjd = J1972 + (tjdEt-tjdEt1972) - (float64(nleap)+boolToFloat64(second60))/86400.0
+  iyear, imonth, iday, d = sweRevjul(tjd, SE_GREG_CAL)
+  ihour = int(d)
+  d -= float64(ihour)
+  d *= 60
+  imin = int(d)
+  dsec = (d - float64(imin)) * 60.0 + boolToFloat64(second60)
+
+  // For input dates > today: Check if delta_t - nleap - 32.184 > 0.9
+  d = sweDeltatEx(tjdEt, -1, nil)
+  d = sweDeltatEx(tjdEt-d, -1, nil)
+  if d*86400.0-float64(nleap+NLEAP_INIT)-32.184 >= 1.0 {
+  	iyear, imonth, iday, d = sweRevjul(tjdEt-d, SE_GREG_CAL)
+  	ihour = int(d)
+  	d -= float64(ihour)
+  	d *= 60
+  	imin = int(d)
+  	dsec = (d - float64(imin)) * 60.0
+  }
+
+  if gregflag == SE_JUL_CAL {
+  	tjd = sweJulday(iyear, imonth, iday, 0, SE_GREG_CAL)
+  	iyear, imonth, iday, _ = sweRevjul(tjd, gregflag)
+  }
+
+  return iyear, imonth, iday, ihour, imin, dsec
+}
+
+func boolToFloat64(b bool) float64 {
+  if b {
+  	return 1.0
+  }
+  return 0.0
+}
+
+
+
+
