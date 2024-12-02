@@ -20,4 +20,6 @@ func main() {
 func Version() {
 	p := segoport.Port{}
 	fmt.Println("Version : " + p.Version())
+	jd := p.SweJulDay(2000, 1, 1, 12.0, 1)
+	fmt.Printf("Julian day : %f\n", jd)
 }

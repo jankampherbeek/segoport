@@ -1,0 +1,361 @@
+package internal
+
+// Global constants, mostly from swephexp.h
+const (
+	// Astronomical unit conversion constants
+	SE_AUNIT_TO_KM        = 149597870.700
+	SE_AUNIT_TO_LIGHTYEAR = 1.0 / 63241.07708427
+	SE_AUNIT_TO_PARSEC    = 1.0 / 206264.8062471
+
+	// Calendar flags
+	SE_JUL_CAL  = 0
+	SE_GREG_CAL = 1
+
+	// Planet numbers
+	SE_ECL_NUT   = -1
+	SE_SUN       = 0
+	SE_MOON      = 1
+	SE_MERCURY   = 2
+	SE_VENUS     = 3
+	SE_MARS      = 4
+	SE_JUPITER   = 5
+	SE_SATURN    = 6
+	SE_URANUS    = 7
+	SE_NEPTUNE   = 8
+	SE_PLUTO     = 9
+	SE_MEAN_NODE = 10
+	SE_TRUE_NODE = 11
+	SE_MEAN_APOG = 12
+	SE_OSCU_APOG = 13
+	SE_EARTH     = 14
+	SE_CHIRON    = 15
+	SE_PHOLUS    = 16
+	SE_CERES     = 17
+	SE_PALLAS    = 18
+	SE_JUNO      = 19
+	SE_VESTA     = 20
+	SE_INTP_APOG = 21
+	SE_INTP_PERG = 22
+
+	SE_NPLANETS = 23
+
+	SE_PLMOON_OFFSET = 9000
+	SE_AST_OFFSET    = 10000
+	SE_VARUNA        = SE_AST_OFFSET + 20000
+
+	SE_FICT_OFFSET   = 40
+	SE_FICT_OFFSET_1 = 39
+	SE_FICT_MAX      = 999
+	SE_NFICT_ELEM    = 15
+
+	SE_COMET_OFFSET = 1000
+
+	SE_NALL_NAT_POINTS = SE_NPLANETS + SE_NFICT_ELEM
+
+	// Hamburger or Uranian "planets"
+	SE_CUPIDO            = 40
+	SE_HADES             = 41
+	SE_ZEUS              = 42
+	SE_KRONOS            = 43
+	SE_APOLLON           = 44
+	SE_ADMETOS           = 45
+	SE_VULKANUS          = 46
+	SE_POSEIDON          = 47
+	SE_ISIS              = 48
+	SE_NIBIRU            = 49
+	SE_HARRINGTON        = 50
+	SE_NEPTUNE_LEVERRIER = 51
+	SE_NEPTUNE_ADAMS     = 52
+	SE_PLUTO_LOWELL      = 53
+	SE_PLUTO_PICKERING   = 54
+	SE_VULCAN            = 55
+	SE_WHITE_MOON        = 56
+	SE_PROSERPINA        = 57
+	SE_WALDEMATH         = 58
+
+	SE_FIXSTAR = -10
+
+	// House systems
+	SE_ASC    = 0
+	SE_MC     = 1
+	SE_ARMC   = 2
+	SE_VERTEX = 3
+	SE_EQUASC = 4
+	SE_COASC1 = 5
+	SE_COASC2 = 6
+	SE_POLASC = 7
+	SE_NASCMC = 8
+
+	// Calculation flags
+	SEFLG_JPLEPH        = 1
+	SEFLG_SWIEPH        = 2
+	SEFLG_MOSEPH        = 4
+	SEFLG_HELCTR        = 8
+	SEFLG_TRUEPOS       = 16
+	SEFLG_J2000         = 32
+	SEFLG_NONUT         = 64
+	SEFLG_SPEED3        = 128
+	SEFLG_SPEED         = 256
+	SEFLG_NOGDEFL       = 512
+	SEFLG_NOABERR       = 1024
+	SEFLG_ASTROMETRIC   = SEFLG_NOABERR | SEFLG_NOGDEFL
+	SEFLG_EQUATORIAL    = 2048
+	SEFLG_XYZ           = 4096
+	SEFLG_RADIANS       = 8192
+	SEFLG_BARYCTR       = 16384
+	SEFLG_TOPOCTR       = 32768
+	SEFLG_ORBEL_AA      = SEFLG_TOPOCTR
+	SEFLG_TROPICAL      = 0
+	SEFLG_SIDEREAL      = 65536
+	SEFLG_ICRS          = 131072
+	SEFLG_DPSIDEPS_1980 = 262144
+	SEFLG_JPLHOR        = SEFLG_DPSIDEPS_1980
+	SEFLG_JPLHOR_APPROX = 524288
+	SEFLG_CENTER_BODY   = 1048576
+	SEFLG_TEST_PLMOON   = 2097152 | SEFLG_J2000 | SEFLG_ICRS | SEFLG_HELCTR | SEFLG_TRUEPOS
+	SEFLG_EPHMASK       = SEFLG_JPLEPH | SEFLG_SWIEPH | SEFLG_MOSEPH
+
+	// Sidereal bits
+	SE_SIDBITS               = 256
+	SE_SIDBIT_ECL_T0         = 256
+	SE_SIDBIT_SSY_PLANE      = 512
+	SE_SIDBIT_USER_UT        = 1024
+	SE_SIDBIT_ECL_DATE       = 2048
+	SE_SIDBIT_NO_PREC_OFFSET = 4096
+	SE_SIDBIT_PREC_ORIG      = 8192
+
+	// Sidereal modes (ayanamsas)
+	SE_SIDM_FAGAN_BRADLEY        = 0
+	SE_SIDM_LAHIRI               = 1
+	SE_SIDM_DELUCE               = 2
+	SE_SIDM_RAMAN                = 3
+	SE_SIDM_USHASHASHI           = 4
+	SE_SIDM_KRISHNAMURTI         = 5
+	SE_SIDM_DJWHAL_KHUL          = 6
+	SE_SIDM_YUKTESHWAR           = 7
+	SE_SIDM_JN_BHASIN            = 8
+	SE_SIDM_BABYL_KUGLER1        = 9
+	SE_SIDM_BABYL_KUGLER2        = 10
+	SE_SIDM_BABYL_KUGLER3        = 11
+	SE_SIDM_BABYL_HUBER          = 12
+	SE_SIDM_BABYL_ETPSC          = 13
+	SE_SIDM_ALDEBARAN_15TAU      = 14
+	SE_SIDM_HIPPARCHOS           = 15
+	SE_SIDM_SASSANIAN            = 16
+	SE_SIDM_GALCENT_0SAG         = 17
+	SE_SIDM_J2000                = 18
+	SE_SIDM_J1900                = 19
+	SE_SIDM_B1950                = 20
+	SE_SIDM_SURYASIDDHANTA       = 21
+	SE_SIDM_SURYASIDDHANTA_MSUN  = 22
+	SE_SIDM_ARYABHATA            = 23
+	SE_SIDM_ARYABHATA_MSUN       = 24
+	SE_SIDM_SS_REVATI            = 25
+	SE_SIDM_SS_CITRA             = 26
+	SE_SIDM_TRUE_CITRA           = 27
+	SE_SIDM_TRUE_REVATI          = 28
+	SE_SIDM_TRUE_PUSHYA          = 29
+	SE_SIDM_GALCENT_RGILBRAND    = 30
+	SE_SIDM_GALEQU_IAU1958       = 31
+	SE_SIDM_GALEQU_TRUE          = 32
+	SE_SIDM_GALEQU_MULA          = 33
+	SE_SIDM_GALALIGN_MARDYKS     = 34
+	SE_SIDM_TRUE_MULA            = 35
+	SE_SIDM_GALCENT_MULA_WILHELM = 36
+	SE_SIDM_ARYABHATA_522        = 37
+	SE_SIDM_BABYL_BRITTON        = 38
+	SE_SIDM_TRUE_SHEORAN         = 39
+	SE_SIDM_GALCENT_COCHRANE     = 40
+	SE_SIDM_GALEQU_FIORENZA      = 41
+	SE_SIDM_VALENS_MOON          = 42
+	SE_SIDM_LAHIRI_1940          = 43
+	SE_SIDM_LAHIRI_VP285         = 44
+	SE_SIDM_KRISHNAMURTI_VP291   = 45
+	SE_SIDM_LAHIRI_ICRC          = 46
+	SE_SIDM_USER                 = 255
+	SE_NSIDM_PREDEF              = 47
+
+	// Node calculation
+	SE_NODBIT_MEAN     = 1
+	SE_NODBIT_OSCU     = 2
+	SE_NODBIT_OSCU_BAR = 4
+	SE_NODBIT_FOPOINT  = 256
+
+	// Default ephemeris
+	SEFLG_DEFAULTEPH = SEFLG_SWIEPH
+
+	// Maximum star name length
+	SE_MAX_STNAME = 256
+
+	// Eclipse types
+	SE_ECL_CENTRAL        = 1
+	SE_ECL_NONCENTRAL     = 2
+	SE_ECL_TOTAL          = 4
+	SE_ECL_ANNULAR        = 8
+	SE_ECL_PARTIAL        = 16
+	SE_ECL_ANNULAR_TOTAL  = 32
+	SE_ECL_HYBRID         = 32
+	SE_ECL_PENUMBRAL      = 64
+	SE_ECL_ALLTYPES_SOLAR = SE_ECL_CENTRAL | SE_ECL_NONCENTRAL | SE_ECL_TOTAL |
+		SE_ECL_ANNULAR | SE_ECL_PARTIAL | SE_ECL_ANNULAR_TOTAL
+	SE_ECL_ALLTYPES_LUNAR    = SE_ECL_TOTAL | SE_ECL_PARTIAL | SE_ECL_PENUMBRAL
+	SE_ECL_VISIBLE           = 128
+	SE_ECL_MAX_VISIBLE       = 256
+	SE_ECL_1ST_VISIBLE       = 512
+	SE_ECL_PARTBEG_VISIBLE   = 512
+	SE_ECL_2ND_VISIBLE       = 1024
+	SE_ECL_TOTBEG_VISIBLE    = 1024
+	SE_ECL_3RD_VISIBLE       = 2048
+	SE_ECL_TOTEND_VISIBLE    = 2048
+	SE_ECL_4TH_VISIBLE       = 4096
+	SE_ECL_PARTEND_VISIBLE   = 4096
+	SE_ECL_PENUMBBEG_VISIBLE = 8192
+	SE_ECL_PENUMBEND_VISIBLE = 16384
+	SE_ECL_OCC_BEG_DAYLIGHT  = 8192
+	SE_ECL_OCC_END_DAYLIGHT  = 16384
+	SE_ECL_ONE_TRY           = 32768
+
+	// Transit calculation
+	SE_CALC_RISE             = 1
+	SE_CALC_SET              = 2
+	SE_CALC_MTRANSIT         = 4
+	SE_CALC_ITRANSIT         = 8
+	SE_BIT_DISC_CENTER       = 256
+	SE_BIT_DISC_BOTTOM       = 8192
+	SE_BIT_GEOCTR_NO_ECL_LAT = 128
+	SE_BIT_NO_REFRACTION     = 512
+	SE_BIT_CIVIL_TWILIGHT    = 1024
+	SE_BIT_NAUTIC_TWILIGHT   = 2048
+	SE_BIT_ASTRO_TWILIGHT    = 4096
+	SE_BIT_FIXED_DISC_SIZE   = 16384
+	SE_BIT_FORCE_SLOW_METHOD = 32768
+	SE_BIT_HINDU_RISING      = SE_BIT_DISC_CENTER | SE_BIT_NO_REFRACTION | SE_BIT_GEOCTR_NO_ECL_LAT
+
+	// Coordinate transformations
+	SE_ECL2HOR = 0
+	SE_EQU2HOR = 1
+	SE_HOR2ECL = 0
+	SE_HOR2EQU = 1
+
+	// Refraction
+	SE_TRUE_TO_APP = 0
+	SE_APP_TO_TRUE = 1
+
+	// JPL Ephemeris files
+	SE_DE_NUMBER    = 431
+	SE_FNAME_DE200  = "de200.eph"
+	SE_FNAME_DE403  = "de403.eph"
+	SE_FNAME_DE404  = "de404.eph"
+	SE_FNAME_DE405  = "de405.eph"
+	SE_FNAME_DE406  = "de406.eph"
+	SE_FNAME_DE431  = "de431.eph"
+	SE_FNAME_DFT    = SE_FNAME_DE431
+	SE_FNAME_DFT2   = SE_FNAME_DE406
+	SE_STARFILE_OLD = "fixstars.cat"
+	SE_STARFILE     = "sefstars.txt"
+	SE_ASTNAMFILE   = "seasnam.txt"
+	SE_FICTFILE     = "seorbel.txt"
+
+	// Tidal acceleration constants
+	SE_TIDAL_DE200           = -23.8946
+	SE_TIDAL_DE403           = -25.580
+	SE_TIDAL_DE404           = -25.580
+	SE_TIDAL_DE405           = -25.826
+	SE_TIDAL_DE406           = -25.826
+	SE_TIDAL_DE421           = -25.85
+	SE_TIDAL_DE422           = -25.85
+	SE_TIDAL_DE430           = -25.82
+	SE_TIDAL_DE431           = -25.80
+	SE_TIDAL_DE441           = -25.936
+	SE_TIDAL_26              = -26.0
+	SE_TIDAL_STEPHENSON_2016 = -25.85
+	SE_TIDAL_DEFAULT         = SE_TIDAL_DE431
+	SE_TIDAL_AUTOMATIC       = 999999
+	SE_TIDAL_MOSEPH          = SE_TIDAL_DE404
+	SE_TIDAL_SWIEPH          = SE_TIDAL_DEFAULT
+	SE_TIDAL_JPLEPH          = SE_TIDAL_DEFAULT
+
+	// Delta T user definition
+	SE_DELTAT_AUTOMATIC = -1e-10
+
+	// Models
+	SE_MODEL_DELTAT         = 0
+	SE_MODEL_PREC_LONGTERM  = 1
+	SE_MODEL_PREC_SHORTTERM = 2
+	SE_MODEL_NUT            = 3
+	SE_MODEL_BIAS           = 4
+	SE_MODEL_JPLHOR_MODE    = 5
+	SE_MODEL_JPLHORA_MODE   = 6
+	SE_MODEL_SIDT           = 7
+	NSE_MODELS              = 8
+
+	// Precession models
+	SEMOD_NPREC               = 11
+	SEMOD_PREC_IAU_1976       = 1
+	SEMOD_PREC_LASKAR_1986    = 2
+	SEMOD_PREC_WILL_EPS_LASK  = 3
+	SEMOD_PREC_WILLIAMS_1994  = 4
+	SEMOD_PREC_SIMON_1994     = 5
+	SEMOD_PREC_IAU_2000       = 6
+	SEMOD_PREC_BRETAGNON_2003 = 7
+	SEMOD_PREC_IAU_2006       = 8
+	SEMOD_PREC_VONDRAK_2011   = 9
+	SEMOD_PREC_OWEN_1990      = 10
+	SEMOD_PREC_NEWCOMB        = 11
+	SEMOD_PREC_DEFAULT        = SEMOD_PREC_VONDRAK_2011
+	SEMOD_PREC_DEFAULT_SHORT  = SEMOD_PREC_VONDRAK_2011
+
+	// Nutation models
+	SEMOD_NNUT              = 5
+	SEMOD_NUT_IAU_1980      = 1
+	SEMOD_NUT_IAU_CORR_1987 = 2 // Herring's (1987) corrections to IAU 1980 nutation series. AA (1996) neglects them.
+	SEMOD_NUT_IAU_2000A     = 3 // very time consuming!
+	SEMOD_NUT_IAU_2000B     = 4 // fast, but precision of milli-arcsec
+	SEMOD_NUT_WOOLARD       = 5
+	SEMOD_NUT_DEFAULT       = SEMOD_NUT_IAU_2000B // fast, but precision of milli-arcsec
+
+	// Methods for sidereal time
+	SEMOD_NSIDT               = 4
+	SEMOD_SIDT_IAU_1976       = 1
+	SEMOD_SIDT_IAU_2006       = 2
+	SEMOD_SIDT_IERS_CONV_2010 = 3
+	SEMOD_SIDT_LONGTERM       = 4
+	SEMOD_SIDT_DEFAULT        = SEMOD_SIDT_LONGTERM
+	// SEMOD_SIDT_DEFAULT    = SEMOD_SIDT_IERS_CONV_2010 // Alternative default
+
+	// Frame bias methods
+	SEMOD_NBIAS        = 3
+	SEMOD_BIAS_NONE    = 1 // ignore frame bias
+	SEMOD_BIAS_IAU2000 = 2 // use frame bias matrix IAU 2000
+	SEMOD_BIAS_IAU2006 = 3 // use frame bias matrix IAU 2006
+	SEMOD_BIAS_DEFAULT = SEMOD_BIAS_IAU2006
+
+	// Methods of JPL Horizons (iflag & SEFLG_JPLHOR)
+	SEMOD_NJPLHOR               = 2
+	SEMOD_JPLHOR_LONG_AGREEMENT = 1 // daily dpsi and deps from file are limited to 1962 - today.
+	// JPL uses the first and last value for all dates beyond this time range.
+	SEMOD_JPLHOR_DEFAULT = SEMOD_JPLHOR_LONG_AGREEMENT
+
+	// Methods of approximation of JPL Horizons (iflag & SEFLG_JPLHORA)
+	SEMOD_NJPLHORA        = 3
+	SEMOD_JPLHORA_1       = 1
+	SEMOD_JPLHORA_2       = 2
+	SEMOD_JPLHORA_3       = 3
+	SEMOD_JPLHORA_DEFAULT = SEMOD_JPLHORA_3
+
+	// Delta T models
+	SEMOD_NDELTAT                         = 5
+	SEMOD_DELTAT_STEPHENSON_MORRISON_1984 = 1
+	SEMOD_DELTAT_STEPHENSON_1997          = 2
+	SEMOD_DELTAT_STEPHENSON_MORRISON_2004 = 3
+	SEMOD_DELTAT_ESPENAK_MEEUS_2006       = 4
+	SEMOD_DELTAT_STEPHENSON_ETC_2016      = 5
+	SEMOD_DELTAT_DEFAULT                  = SEMOD_DELTAT_STEPHENSON_ETC_2016
+
+	SEI_FILE_PLANET   = 0
+	SEI_FILE_MOON     = 1
+	SEI_FILE_MAIN_AST = 2
+	SEI_FILE_ANY_AST  = 3
+	SEI_FILE_FIXSTAR  = 4
+	SEI_FILE_PLMOON   = 5
+)

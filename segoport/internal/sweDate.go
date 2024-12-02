@@ -1,4 +1,4 @@
-package segoport
+package internal
 
 import (
 	"bufio"
@@ -10,12 +10,8 @@ import (
 	"strings"
 )
 
-const (
-	SE_JUL_CAL  = 0
-	SE_GREG_CAL = 1
-	OK          = 0
-	ERR         = -1
-)
+// Port gives access to all the public functions of segoport module.
+type SweDate struct{}
 
 /*
   Transpiled from swe_date_conversion, original comments:
@@ -36,13 +32,13 @@ const (
 
 // SweDateConversion converts date and time into JD and also checks for the validity of the date.
 // Parameters: y, m, d: year, month and date, uttime: UT, c: 'g' for Gregorian calendar, 'j' for Julian.
-func (p *Port) SweDateConversion(y, m, d int, uttime float64, c rune) (float64, error) {
+func (ed *SweDate) SweDateConversion(y, m, d int, uttime float64, c rune) (float64, error) {
 	gregflag := SE_JUL_CAL
 	if c == 'g' {
 		gregflag = SE_GREG_CAL
 	}
-	jd := p.SweJulday(y, m, d, uttime, gregflag)
-	ryear, rmon, rday, _ := p.SweRevjul(jd, gregflag) // ignore value for uttime (rut in SE)
+	jd := ed.SweJulday(y, m, d, uttime, gregflag)
+	ryear, rmon, rday, _ := ed.SweRevjul(jd, gregflag) // ignore value for uttime (rut in SE)
 	if rmon == m && rday == d && ryear == y {
 		return jd, nil
 	} else {
@@ -89,7 +85,7 @@ This function returns the absolute Julian day number (JD)
 // SweJulday returns the JD for a given date, time and calendar.
 // hour represents the hour with a decimal fraction. gregflag is 1 for Gregorian calendar and 0 for Julian calendar
 // (constants: SE_GREG_CAL and SE_JUL_CAL).
-func (p *Port) SweJulday(year, month, day int, hour float64, gregflag int) float64 {
+func (ed *SweDate) SweJulday(year, month, day int, hour float64, gregflag int) float64 {
 	u := float64(year)
 	if month < 3 {
 		u -= 1
@@ -132,7 +128,7 @@ func (p *Port) SweJulday(year, month, day int, hour float64, gregflag int) float
 // SweRevjul returns date and time for a given jd value and calendar.
 // gregflag is 1 for Gregorian calendar and 0 for Julian calendar (constants: SE_GREG_CAL and SE_JUL_CAL).
 // The return values are day, month, year and ut.
-func (p *Port) SweRevjul(jd float64, gregflag int) (int, int, int, float64) {
+func (ed *SweDate) SweRevjul(jd float64, gregflag int) (int, int, int, float64) {
 	u0 := jd + 32082.5
 	if gregflag == SE_GREG_CAL {
 		u1 := u0 + math.Floor(u0/36525.0) - math.Floor(u0/146100.0) - 38.0
@@ -173,14 +169,14 @@ func (p *Port) SweRevjul(jd float64, gregflag int) (int, int, int, float64) {
 // dsec is a decimal swecond, dTimezone is the offseet for the timezone: east is positive, west is negative.
 // Use +dTimeZone for conversion from local time to utc, and -dTimeZone for conversion from utc to local time.
 // Output: year, month, day, hour, minute, decimal second.
-func (p *Port) SweUtcTimeZone(iyear, imonth, iday, ihour, imin int, dsec, dTimezone float64) (int, int, int, int, int, float64) {
+func (ed *SweDate) SweUtcTimeZone(iyear, imonth, iday, ihour, imin int, dsec, dTimezone float64) (int, int, int, int, int, float64) {
 	haveLeapsec := false
 	if dsec >= 60.0 {
 		haveLeapsec = true
 		dsec -= 1.0
 	}
 	dhour := float64(ihour) + float64(imin)/60.0 + dsec/3600.0
-	tjd := p.SweJulday(iyear, imonth, iday, 0, SE_GREG_CAL)
+	tjd := ed.SweJulday(iyear, imonth, iday, 0, SE_GREG_CAL)
 	dhour -= dTimezone
 	if dhour < 0.0 {
 		tjd -= 1.0
@@ -190,7 +186,7 @@ func (p *Port) SweUtcTimeZone(iyear, imonth, iday, ihour, imin int, dsec, dTimez
 		tjd += 1.0
 		dhour -= 24.0
 	}
-	iyearOut, imonthOut, idayOut, _ := p.SweRevjul(tjd+0.001, SE_GREG_CAL)
+	iyearOut, imonthOut, idayOut, _ := ed.SweRevjul(tjd+0.001, SE_GREG_CAL)
 	ihourOut := int(dhour)
 	d := (dhour - float64(ihourOut)) * 60
 	iminOut := int(d)
@@ -286,14 +282,14 @@ const (
 // Input parameter dsec contains seconds with a decimal fraction, gregflag is 1 for Gregorian calendar and 0 for Julian
 //
 //	calendar (constants: SE_GREG_CAL and SE_JUL_CAL).
-func (p *Port) SweUtcToJd(iyear, imonth, iday, ihour, imin int, dsec float64, gregflag int) (float64, float64, error) {
+func (ed *SweDate) SweUtcToJd(iyear, imonth, iday, ihour, imin int, dsec float64, gregflag int) (float64, float64, error) {
 	var tjdUt1, tjdEt, tjdEt1972, dhour, d float64
 	var iyear2, imonth2, iday2 int
 	var nleap, ndat, tabsizNleap int
 
 	// Error handling: invalid iyear etc.
-	tjdUt1 = p.SweJulday(iyear, imonth, iday, 0, gregflag)
-	iyear2, imonth2, iday2, _ = p.SweRevjul(tjdUt1, gregflag)
+	tjdUt1 = ed.SweJulday(iyear, imonth, iday, 0, gregflag)
+	iyear2, imonth2, iday2, _ = ed.SweRevjul(tjdUt1, gregflag)
 	if iyear != iyear2 || imonth != imonth2 || iday != iday2 {
 		return 0, 0, errors.New(fmt.Sprintf("invalid date: year = %d, month = %d, day = %d", iyear, imonth, iday))
 	}
@@ -305,7 +301,7 @@ func (p *Port) SweUtcToJd(iyear, imonth, iday, ihour, imin int, dsec float64, gr
 
 	// Before 1972, treat input date as UT1
 	if tjdUt1 < J1972 {
-		tjdUt1 = p.SweJulday(iyear, imonth, iday, dhour, gregflag)
+		tjdUt1 = ed.SweJulday(iyear, imonth, iday, dhour, gregflag)
 		tjdEt = tjdUt1 + sweDeltatEx(tjdUt1, -1, nil)
 		return tjdEt, tjdUt1, nil
 	}
@@ -313,7 +309,7 @@ func (p *Port) SweUtcToJd(iyear, imonth, iday, ihour, imin int, dsec float64, gr
 	// Convert to Gregorian calendar if needed
 	if gregflag == SE_JUL_CAL {
 		gregflag = SE_GREG_CAL
-		iyear, imonth, iday, _ = p.SweRevjul(tjdUt1, gregflag)
+		iyear, imonth, iday, _ = ed.SweRevjul(tjdUt1, gregflag)
 	}
 
 	// Number of leap seconds since 1972

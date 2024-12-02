@@ -2998,6 +2998,8 @@ double dtcf16[NDTCF16][6] =
 /*52*/ {2455197.5, 2456293.5,    66.063,     0.828,    -0.142,     0.168}, /* ybeg=2010, yend=2013 */
 /*53*/ {2456293.5, 2457388.5,    66.917,     1.046,     0.360,    -0.282}, /* ybeg=2013, yend=2016 */
 };
+
+
 static double deltat_stephenson_etc_2016(double tjd, double tid_acc)
 {
   double t, dt, Ygreg;
@@ -3025,8 +3027,8 @@ static double deltat_stephenson_etc_2016(double tjd, double tid_acc)
     dt = -320 + 32.5 * t * t;
     dt += 269.4790417; // to make curve continous on 1 Jan 2016 (D. Koch)
   }
-  /* The parameter adjust_after_1955 must be TRUE here, because the 
-   * Stephenson 2016 curve is based on occultation data alone, 
+  /* The parameter adjust_after_1955 must be TRUE here, because the
+   * Stephenson 2016 curve is based on occultation data alone,
    * not on IERS data.
    * Note, however, the current function deltat_stephenson_etc_2016()
    * is called only for dates before 1 Jan 1955. */
