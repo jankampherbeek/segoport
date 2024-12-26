@@ -10,10 +10,9 @@ func (p *Port) Version() string {
 	return "Temporary version 0.0.0"
 }
 
-// SweJulDay returns the Julian Day Number.
+// UseSweJulDay returns the Julian Day Number.
 // Input: year, month, day as int, hour as number with fraction and gregflag to indicate the calender: 1 = Gregorian, 0 = Julian.
 // Ouput: the calculated Julian Day Number.
-func (p *Port) SweJulDay(year, month, day int, hour float64, gregflag int) float64 {
-	d := internal.SweDate{}
-	return d.SweJulday(year, month, day, hour, gregflag)
+func (p *Port) UseSweJulDay(year, month, day int, hour float64, gregflag int) float64 {
+	return internal.SweJulday(year, month, day, hour, gregflag)
 }

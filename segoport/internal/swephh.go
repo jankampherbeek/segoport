@@ -2,7 +2,6 @@ package internal
 
 import (
 	"math"
-	"os"
 )
 
 const (
@@ -445,13 +444,13 @@ var Ayanamsa = [SE_NSIDM_PREDEF]AyaInit{
 	/*************************/
 }
 
-// Epsilon represents the obliquity of ecliptic
-type Epsilon struct {
-	Teps float64 // jd (Julian date)
-	Eps  float64 // eps (epsilon/obliquity value)
-	Seps float64 // sin(eps)
-	Ceps float64 // cos(eps)
-}
+//// Epsilon represents the obliquity of ecliptic
+//type Epsilon struct {
+//	Teps float64 // jd (Julian date)
+//	Eps  float64 // eps (epsilon/obliquity value)
+//	Seps float64 // sin(eps)
+//	Ceps float64 // cos(eps)
+//}
 
 // PlanetData holds orbital and computational data for a celestial body
 type PlanetData struct {
@@ -498,14 +497,14 @@ type PlanetData struct {
 // STR represents radians per arc second
 const STR = 4.8481368110953599359e-6
 
-// Nut represents nutation parameters
-type Nut struct {
-	Tnut   float64       // Time parameter for nutation
-	Nutlo  [2]float64    // Nutation in longitude and obliquity
-	Snut   float64       // Sine of nutation in obliquity
-	Cnut   float64       // Cosine of nutation in obliquity
-	Matrix [3][3]float64 // 3x3 matrix
-}
+//// Nut represents nutation parameters
+//type Nut struct {
+//	Tnut   float64       // Time parameter for nutation
+//	Nutlo  [2]float64    // Nutation in longitude and obliquity
+//	Snut   float64       // Sine of nutation in obliquity
+//	Cnut   float64       // Cosine of nutation in obliquity
+//	Matrix [3][3]float64 // 3x3 matrix
+//}
 
 // Plantbl represents planetary table parameters
 type Plantbl struct {
@@ -518,40 +517,40 @@ type Plantbl struct {
 	Distance    float64   // Distance value
 }
 
-// FileData holds information about ephemeris files
-type FileData struct {
-	Fnam       string
-	FVersion   int
-	AstName    string
-	SwephDenum int32
-	Fptr       *os.File
-	TfStart    float64
-	TfEnd      float64
-	IFlg       int32
-	NPl        int16
-	IPl        [SEI_FILE_NMAXPLAN]int
-}
-
-type GenConst struct {
-	Clight       float64 // Speed of light
-	Aunit        float64 // Astronomical unit
-	Helgravconst float64 // Heliocentric gravitational constant
-	Ratme        float64 // Ratio of mass of Earth
-	Sunradius    float64 // Solar radius
-}
-
-type SavePositions struct {
-	Ipl      int     // Planet index
-	Tsave    float64 // Time of save
-	Iflgsave int32   // Saved flags
-	// Position at t = tsave, in:
-	// - ecliptic polar (offset 0)
-	// - ecliptic cartesian (offset 6)
-	// - equatorial polar (offset 12)
-	// - equatorial cartesian coordinates (offset 18)
-	// 6 doubles each for position and speed coordinates
-	Xsaves [24]float64
-}
+//// FileData holds information about ephemeris files
+//type FileData struct {
+//	Fnam       string
+//	FVersion   int
+//	AstName    string
+//	SwephDenum int32
+//	Fptr       *os.File
+//	TfStart    float64
+//	TfEnd      float64
+//	IFlg       int32
+//	NPl        int16
+//	IPl        [SEI_FILE_NMAXPLAN]int
+//}
+//
+//type GenConst struct {
+//	Clight       float64 // Speed of light
+//	Aunit        float64 // Astronomical unit
+//	Helgravconst float64 // Heliocentric gravitational constant
+//	Ratme        float64 // Ratio of mass of Earth
+//	Sunradius    float64 // Solar radius
+//}
+//
+//type SavePositions struct {
+//	Ipl      int     // Planet index
+//	Tsave    float64 // Time of save
+//	Iflgsave int32   // Saved flags
+//	// Position at t = tsave, in:
+//	// - ecliptic polar (offset 0)
+//	// - ecliptic cartesian (offset 6)
+//	// - equatorial polar (offset 12)
+//	// - equatorial cartesian coordinates (offset 18)
+//	// 6 doubles each for position and speed coordinates
+//	Xsaves [24]float64
+//}
 
 type NodeData struct {
 	Teval float64    // Time for which last computation was made
@@ -566,111 +565,112 @@ type NodeData struct {
 	Xreturn [24]float64
 }
 
-type TopoData struct {
-	Geolon float64    // Geographic longitude
-	Geolat float64    // Geographic latitude
-	Geoalt float64    // Geographic altitude
-	Teval  float64    // Evaluation time
-	TjdUt  float64    // Julian Day UT
-	Xobs   [6]float64 // Observer position
-}
-
-type SidData struct {
-	SidMode int32   // Sidereal mode
-	AyanT0  float64 // Ayanamsha at T0
-	T0      float64 // Reference time T0
-	T0IsUT  bool    // True if T0 is UT
-}
-
-const SWI_STAR_LENGTH = 40
-
-// FixedStar represents fixed star data
-type FixedStar struct {
-	Skey      [SWI_STAR_LENGTH + 2]byte // May be prefixed with comma, one char more
-	StarName  [SWI_STAR_LENGTH + 1]byte
-	StarBayer [SWI_STAR_LENGTH + 1]byte
-	StarNo    [10]byte
-	Epoch     float64
-	Ra        float64
-	De        float64
-	RaMot     float64
-	DeMot     float64
-	RadVel    float64
-	Parall    float64
-	Mag       float64
-}
+//
+//type TopoData struct {
+//	Geolon float64    // Geographic longitude
+//	Geolat float64    // Geographic latitude
+//	Geoalt float64    // Geographic altitude
+//	Teval  float64    // Evaluation time
+//	TjdUt  float64    // Julian Day UT
+//	Xobs   [6]float64 // Observer position
+//}
+//
+//type SidData struct {
+//	SidMode int32   // Sidereal mode
+//	AyanT0  float64 // Ayanamsha at T0
+//	T0      float64 // Reference time T0
+//	T0IsUT  bool    // True if T0 is UT
+//}
+//
+//const SWI_STAR_LENGTH = 40
+//
+//// FixedStar represents fixed star data
+//type FixedStar struct {
+//	Skey      [SWI_STAR_LENGTH + 2]byte // May be prefixed with comma, one char more
+//	StarName  [SWI_STAR_LENGTH + 1]byte
+//	StarBayer [SWI_STAR_LENGTH + 1]byte
+//	StarNo    [10]byte
+//	Epoch     float64
+//	Ra        float64
+//	De        float64
+//	RaMot     float64
+//	DeMot     float64
+//	RadVel    float64
+//	Parall    float64
+//	Mag       float64
+//}
 
 // SWE_DATA_DPSI_DEPS represents the number of days for dpsi and deps data (100 years after 1962)
 const SWE_DATA_DPSI_DEPS = 36525
 
-// Interpol represents interpolation data for nutation
-type Interpol struct {
-	TjdNut0  float64
-	TjdNut2  float64
-	NutDpsi0 float64
-	NutDpsi1 float64
-	NutDpsi2 float64
-	NutDeps0 float64
-	NutDeps1 float64
-	NutDeps2 float64
-}
-
-// SweData represents Swiss Ephemeris data
-type SweData struct {
-	EphePathIsSet      bool
-	JplFileIsOpen      bool
-	FixFp              *os.File //Fixed stars file pointer
-	EphePath           string   // [AS_MAXCH]byte
-	JplFnam            string   // [AS_MAXCH]byte
-	JplDenum           int32
-	LastEpheFlag       int32
-	GeoposIsSet        bool
-	AyanaIsSet         bool
-	IsOldStarfile      bool
-	EopTjdBeg          float64
-	EopTjdBegHorizons  float64
-	EopTjdEnd          float64
-	EopTjdEndAdd       float64
-	EopDpsiLoaded      int
-	TidAcc             float64
-	IsTidAccManual     bool
-	InitDtDone         bool
-	SwedIsInitialised  bool
-	DeltaTUserdefIsSet bool
-	DeltaTUserdef      float64
-	AstG               float64
-	AstH               float64
-	AstDiam            float64
-	Astelem            [AS_MAXCH * 10]byte
-	ISavedPlanetName   int
-	SavedPlanetName    [80]byte
-	Dpsi               []float64
-	Deps               []float64
-	Timeout            int32
-	AstroModels        [SEI_NMODELS]int32
-	DoInterpolateNut   bool
-	Interpol           Interpol
-	Fidat              [SEI_NEPHFILES]FileData
-	Gcdat              GenConst
-	//	#if 0
-	//     struct node_data nddat[SEI_NNODE_ETC];
-	//	#else
-	//     struct plan_data nddat[SEI_NNODE_ETC];
-	//	#endif
-	Pldat            [SEI_NPLANETS]PlanetData
-	Nddat            [SEI_NNODE_ETC]PlanetData
-	Savedat          [SE_NPLANETS + 1]SavePositions
-	Oec              Epsilon
-	Oec2000          Epsilon
-	Nut              Nut
-	Nut2000          Nut
-	Nutv             Nut
-	Topd             TopoData
-	Sidd             SidData
-	NFixstarsReal    bool
-	NFixstarsNamed   bool
-	NFixstarsRecords bool
-	FixedStars       *FixedStar
-}
-
-var sweData SweData
+//// Interpol represents interpolation data for nutation
+//type Interpol struct {
+//	TjdNut0  float64
+//	TjdNut2  float64
+//	NutDpsi0 float64
+//	NutDpsi1 float64
+//	NutDpsi2 float64
+//	NutDeps0 float64
+//	NutDeps1 float64
+//	NutDeps2 float64
+//}
+//
+//// SweData represents Swiss Ephemeris data
+//type SweData struct {
+//	EphePathIsSet      bool
+//	JplFileIsOpen      bool
+//	FixFp              *os.File //Fixed stars file pointer
+//	EphePath           string   // [AS_MAXCH]byte
+//	JplFnam            string   // [AS_MAXCH]byte
+//	JplDenum           int32
+//	LastEpheFlag       int32
+//	GeoposIsSet        bool
+//	AyanaIsSet         bool
+//	IsOldStarfile      bool
+//	EopTjdBeg          float64
+//	EopTjdBegHorizons  float64
+//	EopTjdEnd          float64
+//	EopTjdEndAdd       float64
+//	EopDpsiLoaded      int
+//	TidAcc             float64
+//	IsTidAccManual     bool
+//	InitDtDone         bool
+//	SwedIsInitialised  bool
+//	DeltaTUserdefIsSet bool
+//	DeltaTUserdef      float64
+//	AstG               float64
+//	AstH               float64
+//	AstDiam            float64
+//	Astelem            [AS_MAXCH * 10]byte
+//	ISavedPlanetName   int
+//	SavedPlanetName    string
+//	Dpsi               []float64
+//	Deps               []float64
+//	Timeout            int32
+//	AstroModels        [SEI_NMODELS]int32
+//	DoInterpolateNut   bool
+//	Interpol           Interpol
+//	Fidat              [SEI_NEPHFILES]FileData
+//	Gcdat              GenConst
+//	//	#if 0
+//	//     struct node_data nddat[SEI_NNODE_ETC];
+//	//	#else
+//	//     struct plan_data nddat[SEI_NNODE_ETC];
+//	//	#endif
+//	Pldat            [SEI_NPLANETS]PlanetData
+//	Nddat            [SEI_NNODE_ETC]PlanetData
+//	Savedat          [SE_NPLANETS + 1]SavePositions
+//	Oec              Epsilon
+//	Oec2000          Epsilon
+//	Nut              Nut
+//	Nut2000          Nut
+//	Nutv             Nut
+//	Topd             TopoData
+//	Sidd             SidData
+//	NFixstarsReal    bool
+//	NFixstarsNamed   bool
+//	NFixstarsRecords bool
+//	FixedStars       *FixedStar
+//}
+//
+//var sweData SweData
